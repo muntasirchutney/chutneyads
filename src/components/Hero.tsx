@@ -1,25 +1,74 @@
-import Link from "next/link";
-import { ContainerTextFlip } from "./ui/container-text-flip";
+﻿'use client';
+
+import { motion } from 'motion/react';
+import Link from 'next/link';
+
+import { ContainerTextFlip } from './ui/container-text-flip';
+
+const heroVariants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export default function Hero() {
   return (
-    <div className='h-screen'>
-      <img src="/bg.png" alt="hero" className=' absolute top-0 right-0  max-w-[42.7%] h-full ' />
-      <img src="/shape-1.svg" alt="" className='absolute top-0 left-0' />
-      <img src="/shape-3.svg" alt="" className='absolute -rotate-90 -left-14 bottom-10 w-[150px]' />
-      <div className=' w-full xl:max-w-[1200px] 3xl:max-w-[1400px]  mx-auto content-center h-full align-middle'>
-        <div className=' max-w-1/2 font-sans'>
-          <img src="/logo.svg" alt="logo" className='h-[70px] mb-10' />
-          <div className='text-[48px] leading-[1.3] '>Amplify Your Brand’s
-           
-            Voice in the Heart of <strong>Bangladesh’s</strong> <br /> <ContainerTextFlip
-              words={["Better", "Modern", "Awesome"]}
-            /> Marketplaces</div>
-          <p className='text-lg leading-[1.6] text-[#666666] mt-6'>Engage with Strategic, Real-Time DOOH Advertising</p>
-
-          <Link href="/contact" className='btn'>Contact Us</Link>
-        </div>
+    <section className="relative h-screen overflow-hidden">
+      <motion.img
+        src="/bg.png"
+        alt="hero"
+        className="absolute top-0 right-0 h-full max-w-[42.7%]"
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.1, ease: 'easeOut' }}
+      />
+      <motion.img
+        src="/shape-1.svg"
+        alt=""
+        className="absolute top-0 left-0"
+        initial={{ opacity: 0, x: -60 }}
+        animate={{ opacity: 0.8, x: 0 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      />
+      {/* <motion.img
+        src="/shape-3.svg"
+        alt=""
+        className="absolute bottom-10 -left-14 w-[150px] -rotate-90"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 0.9, y: 0 }}
+        transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+      /> */}
+      <div className="mx-auto h-full w-full content-center align-middle xl:max-w-[1200px] 3xl:max-w-[1400px]">
+        <motion.div
+          className="max-w-1/2 font-sans"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.15 },
+            },
+          }}
+        >
+          <motion.img src="/logo.svg" alt="logo" className="mb-10 h-[70px]" variants={heroVariants} />
+          <motion.div className="text-[48px] leading-[1.3]" variants={heroVariants}>
+            Amplify Your Brand&apos;s Voice in the Heart of
+            {' '}
+            <strong>Bangladesh&apos;s</strong>
+            <br />
+            <ContainerTextFlip words={['Better', 'Modern', 'Awesome']} />
+            {' '}
+            Marketplaces
+          </motion.div>
+          <motion.p className="mt-6 text-lg leading-[1.6] text-[#666666]" variants={heroVariants}>
+            Engage with Strategic, Real-Time DOOH Advertising
+          </motion.p>
+          <motion.div variants={heroVariants}>
+            <Link href="/contact" className="btn inline-flex items-center justify-center">
+              Contact Us
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 }

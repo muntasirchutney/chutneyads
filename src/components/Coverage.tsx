@@ -1,14 +1,16 @@
+'use client';
 
-"use client"
-import { useEffect, useState } from 'react';
+import { motion, useInView } from 'motion/react';
+import { useRef } from 'react';
+
 import DistrictMap from './Map';
 
-interface DistrictData {
+type DistrictData = {
   name: string;
   area: number;
   population: string;
   density: string;
-}
+};
 
 const districts: DistrictData[] = [
   { name: 'Uttara', area: 69, population: '2.1M', density: '30.5K' },
@@ -18,163 +20,121 @@ const districts: DistrictData[] = [
 ];
 
 const ImpactCoverage = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
   const totalArea = districts.reduce((sum, d) => sum + d.area, 0);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600"
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1)_0%,transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
 
-      <div className="relative max-w-7xl mx-auto  sm:px-6 lg:px-8 py-16 lg:py-24">
-        <div
-          className={`text-center mb-12 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
-            }`}
+      <div className="relative mx-auto max-w-7xl py-16 sm:px-6 lg:px-8 lg:py-24">
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: -30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -30 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight">
-            IMPACT & COVERAGE
-          </h1>
-          <p className="text-white/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Serving the bustling neighborhoods of Uttara, Mirpur, Mohammadpur, and Dhanmondi, we
-            are positioned to deliver over 1 Billion impressions monthly.
+          <h1 className="mb-6 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">IMPACT & COVERAGE</h1>
+          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-white/90 md:text-xl">
+            Serving the bustling neighborhoods of Uttara, Mirpur, Mohammadpur, and Dhanmondi, we are positioned to deliver over 1
+            Billion impressions monthly.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-10 items-start">
-          <div
-            className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
-              }`}
+        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
+          <motion.div
+            className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-sm md:p-8"
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
           >
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/20 shadow-2xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-                OUR CURRENT COVERAGE
-              </h2>
+            <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">OUR CURRENT COVERAGE</h2>
 
-              <div className="flex flex-wrap gap-3 mb-8">
-                {districts.map((district, index) => (
-                  <div
-                    key={district.name}
-                    className="group"
-                    style={{
-                      animation: `fadeInScale 0.6s ease-out ${0.5 + index * 0.1}s both`,
-                    }}
-                  >
-                    <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg border border-white/30 hover:bg-white/30 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                      <span className="text-white font-medium">{district.name}</span>
-                    </div>
+            <div className="mb-8 flex flex-wrap gap-3">
+              {districts.map((district, index) => (
+                <motion.div
+                  key={district.name}
+                  className="group"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={
+                    isInView
+                      ? { opacity: 1, scale: 1, transition: { delay: 0.2 + index * 0.08, duration: 0.4 } }
+                      : { opacity: 0, scale: 0.8 }
+                  }
+                >
+                  <div className="rounded-lg border border-white/30 bg-white/20 px-4 py-2 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-lg">
+                    <span className="font-medium text-white">{district.name}</span>
                   </div>
-                ))}
-              </div>
-
-              <div className="overflow-hidden rounded-xl border border-white/20 shadow-xl">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-white/20 backdrop-blur-md">
-                      <th className="text-left py-4 px-4 text-white font-bold text-sm md:text-base">
-                        DISTRICT
-                      </th>
-                      <th className="text-center py-4 px-2 text-white font-bold text-sm md:text-base">
-                        AREA (KM²)
-                      </th>
-                      <th className="text-center py-4 px-2 text-white font-bold text-sm md:text-base">
-                        POPULATION
-                      </th>
-                      <th className="text-center py-4 px-2 text-white font-bold text-sm md:text-base">
-                        DENSITY (SQ KM)
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {districts.map((district, index) => (
-                      <tr
-                        key={district.name}
-                        className="border-t border-white/10 hover:bg-white/10 transition-all duration-300 group"
-                        style={{
-                          animation: `slideInRight 0.5s ease-out ${0.8 + index * 0.1}s both`,
-                        }}
-                      >
-                        <td className="py-4 px-4 text-white font-medium text-sm md:text-base">
-                          {district.name}
-                        </td>
-                        <td className="py-4 px-2 text-white text-center text-sm md:text-base">
-                          {district.area}
-                        </td>
-                        <td className="py-4 px-2 text-white text-center text-sm md:text-base">
-                          {district.population}
-                        </td>
-                        <td className="py-4 px-2 text-white text-center text-sm md:text-base">
-                          {district.density}
-                        </td>
-                      </tr>
-                    ))}
-                    <tr className="border-t-2 border-white/30 bg-white/20 font-bold">
-                      <td className="py-4 px-4 text-white text-sm md:text-base">Total</td>
-                      <td className="py-4 px-2 text-white text-center text-sm md:text-base">
-                        {totalArea}
-                      </td>
-                      <td className="py-4 px-2 text-white text-center text-sm md:text-base">
-                        4.5M
-                      </td>
-                      <td className="py-4 px-2 text-white text-center text-sm md:text-base">
-                        24.2K
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
 
-          <div
-            className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
-              }`}
+            <div className="overflow-hidden rounded-xl border border-white/20 shadow-xl">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-white/20 backdrop-blur-md">
+                    <th className="px-4 py-4 text-left text-sm font-bold text-white md:text-base">DISTRICT</th>
+                    <th className="px-2 py-4 text-center text-sm font-bold text-white md:text-base">AREA (KM^2)</th>
+                    <th className="px-2 py-4 text-center text-sm font-bold text-white md:text-base">POPULATION</th>
+                    <th className="px-2 py-4 text-center text-sm font-bold text-white md:text-base">DENSITY (SQ KM)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {districts.map((district, index) => (
+                    <motion.tr
+                      key={district.name}
+                      className="border-t border-white/10 text-sm text-white transition-all duration-300 hover:bg-white/10 md:text-base"
+                      initial={{ opacity: 0, x: -25 }}
+                      animate={
+                        isInView
+                          ? { opacity: 1, x: 0, transition: { delay: 0.4 + index * 0.08, duration: 0.4 } }
+                          : { opacity: 0, x: -25 }
+                      }
+                    >
+                      <td className="px-4 py-4 font-medium">{district.name}</td>
+                      <td className="px-2 py-4 text-center">{district.area}</td>
+                      <td className="px-2 py-4 text-center">{district.population}</td>
+                      <td className="px-2 py-4 text-center">{district.density}</td>
+                    </motion.tr>
+                  ))}
+                  <tr className="border-t-2 border-white/30 bg-white/20 text-sm font-bold text-white md:text-base">
+                    <td className="px-4 py-4">Total</td>
+                    <td className="px-2 py-4 text-center">{totalArea}</td>
+                    <td className="px-2 py-4 text-center">4.5M</td>
+                    <td className="px-2 py-4 text-center">24.2K</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
           >
             <DistrictMap />
-          </div>
+          </motion.div>
         </div>
 
-        <div
-          className={`mt-12 text-center transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
+        <motion.div
+          className="mt-12 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
         >
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/20 shadow-2xl max-w-4xl mx-auto">
-            <p className="text-white/95 text-base md:text-lg leading-relaxed">
-              Reach close to 70% of target residents with an effective ad frequency, ensuring high recall
-              and brand safety within a trusted and transparent platform.
-            </p>
+          <div className="mx-auto max-w-4xl rounded-2xl border border-white/20 bg-white/10 p-6 text-base text-white/95 shadow-2xl backdrop-blur-sm md:p-8 md:text-lg">
+            Reach close to 70% of target residents with an effective ad frequency, ensuring high recall and brand safety within a
+            trusted and transparent platform.
           </div>
-        </div>
+        </motion.div>
       </div>
-
-      <style>{`
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.8);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
-    </div>
+    </section>
   );
 };
 
