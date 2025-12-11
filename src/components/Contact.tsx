@@ -169,32 +169,3 @@ function PixelGrid({ mounted }: { mounted: boolean }) {
   );
 }
 
-function CornerDecoration() {
-  const colors = ['#f2542d', '#ff8a3c', '#ffb85c', '#ffe6a3'];
-  const cells: Array<{ id: string; color: string; visible: boolean }> = [];
-
-  for (let row = 0; row < 6; row += 1) {
-    for (let col = 0; col < 6; col += 1) {
-      cells.push({
-        id: `${row}-${col}`,
-        color: colors[(row + col) % colors.length],
-        visible: (row + col) % 3 !== 0,
-      });
-    }
-  }
-
-  return (
-    <div className="grid grid-cols-6 gap-1 p-4">
-      {cells.map((cell, index) => (
-        <div
-          key={cell.id}
-          className="h-4 w-4 rounded-sm transition-all duration-500 hover:scale-110 lg:h-6 lg:w-6"
-          style={{
-            transitionDelay: `${index * 20}ms`,
-            backgroundColor: cell.visible ? cell.color : 'rgba(255,255,255,0.1)',
-          }}
-        />
-      ))}
-    </div>
-  );
-}

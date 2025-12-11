@@ -23,13 +23,7 @@ type Story = StoryObj<typeof meta>;
 
 export const BaseWithReactComponent: Story = {
   args: {
-    children: <div>Children node</div>,
-    leftNav: (
-      <>
-        <li>Link 1</li>
-        <li>Link 2</li>
-      </>
-    ),
+    children: <div>Children node</div>
   },
 };
 

@@ -137,33 +137,4 @@ export const Benefits = () => {
   );
 };
 
-function PixelAccent({ className = '' }: { className?: string }) {
-  const palette = ['#ff5f2f', '#ff8a3c', '#ffb85c', '#ffe6a3'];
-  const cells: Array<{ id: string; color: string; opacity: number }> = [];
 
-  for (let row = 0; row < 4; row += 1) {
-    for (let col = 0; col < 4; col += 1) {
-      cells.push({
-        id: `${row}-${col}`,
-        color: palette[row],
-        opacity: 1 - col * 0.15,
-      });
-    }
-  }
-
-  return (
-    <div className={`grid grid-cols-4 gap-[3px] ${className}`}>
-      {cells.map((cell, index) => (
-        <span
-          key={cell.id}
-          className="block h-3 w-3 rounded-[4px]"
-          style={{
-            backgroundColor: cell.color,
-            opacity: cell.opacity,
-            transitionDelay: `${index * 10}ms`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}

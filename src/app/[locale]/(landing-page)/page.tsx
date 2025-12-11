@@ -7,7 +7,6 @@ import { Banner } from '@/components/Banner';
 import { Benefits } from '@/components/Benefits';
 import StatisticsSection from '@/components/Stats';
 import ImpactCoverage from '@/components/Coverage';
-import { ConsultationForm } from '@/components/ConsultationForm';
 import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
 type IIndexProps = {

@@ -24,31 +24,35 @@ const StatCard = ({
 }: StatCardProps) => {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
-
+// eslint-disable-next-line
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let counter: ReturnType<typeof setInterval> | null = null;
+
     if (isVisible && !hasAnimated) {
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         const duration = 2000;
         const steps = 60;
         const increment = percentage / steps;
         let current = 0;
 
-        const counter = setInterval(() => {
+        counter = setInterval(() => {
           current += increment;
           if (current >= percentage) {
             setCount(percentage);
-            clearInterval(counter);
+            if (counter) clearInterval(counter);
             setHasAnimated(true);
           } else {
             setCount(Math.floor(current));
           }
         }, duration / steps);
-
-        return () => clearInterval(counter);
       }, delay);
-
-      return () => clearTimeout(timer);
     }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      if (counter) clearInterval(counter);
+    };
   }, [isVisible, percentage, delay, hasAnimated]);
 
   return (

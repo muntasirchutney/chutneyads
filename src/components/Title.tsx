@@ -27,20 +27,20 @@ export function Title({ children, subtitle }: { children: ReactNode; subtitle?: 
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.5 }}
-      variants={containerVariants}
+      variants={containerVariants as any}
     >
       <BackgroundRippleEffect />
       <div className="mt-20 w-full">
         <motion.h2
           className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-neutral-800 md:text-4xl lg:text-5xl dark:text-neutral-100"
-          variants={containerVariants}
+          variants={containerVariants as any}
           transition={{ delay: 0.05 }}
         >
           {children}
         </motion.h2>
         <motion.p
           className="relative z-10 mx-auto mt-4 max-w-lg text-center text-[24px] text-neutral-800 dark:text-neutral-500"
-          variants={containerVariants}
+          variants={containerVariants as any}
           transition={{ delay: 0.15 }}
         >
           {subtitle}

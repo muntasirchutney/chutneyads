@@ -1,38 +1,44 @@
 'use client';
 
 import { Eye, MousePointerClick, Smartphone } from 'lucide-react';
-import { motion, useInView } from 'motion/react';
+import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 const StatisticsSection = () => {
-  const [animatedValues, setAnimatedValues] = useState([0, 0, 0]);
-  const sectionRef = useRef(null);
+  const [animatedValues, setAnimatedValues] = useState<number[]>([0, 0, 0]);
+  const sectionRef = useRef<HTMLElement | null>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
-    if (!isInView) {
-      return;
-    }
+    if (!isInView) return;
 
     const targets = [50, 54, 64];
     const durations = [2000, 2200, 2400];
 
     const intervals = targets.map((target, index) => {
       const startTime = Date.now() + index * 200;
-      return setInterval(() => {
+
+      const id = window.setInterval(() => {
         const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / durations[index], 1);
+        const progress = Math.min(elapsed / (durations[index] ?? 1), 1);
         const easeOut = 1 - (1 - progress) ** 3;
+
         setAnimatedValues((prev) => {
           const next = [...prev];
           next[index] = Math.floor(target * easeOut);
           return next;
         });
+
+        if (progress === 1) {
+          window.clearInterval(id);
+        }
       }, 16);
+
+      return id;
     });
 
     return () => {
-      intervals.forEach((interval) => clearInterval(interval));
+      intervals.forEach((id) => window.clearInterval(id));
     };
   }, [isInView]);
 
@@ -65,34 +71,17 @@ const StatisticsSection = () => {
       gradientStops: ['#f43f5e', '#be123c'],
     },
   ];
+
   const highlightStat = stats[2];
-  const liftValue = highlightStat.percentage - stats[0].percentage;
-  const averageValue = Math.round(
-    stats.reduce((acc, _stat, index) => acc + (animatedValues[index] || 0), 0) / stats.length,
-  );
-  const attentionValue = animatedValues[0] || 0;
-  const mobileValue = animatedValues[1] || 0;
   const actionValue = animatedValues[2] || 0;
-  const journeyPoints = [
-    {
-      color: 'bg-orange-500',
-      text: `${stats[0].percentage}% notice rate on our hero LED walls across major city arteries.`,
-    },
-    {
-      color: 'bg-rose-500',
-      text: `${stats[1].percentage}% of walkers continue the journey with QR scans or app downloads.`,
-    },
-    {
-      color: 'bg-red-600',
-      text: `${stats[2].percentage}% push through to a measurable action once they spot your story.`,
-    },
-  ];
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
+    >
       <div className="absolute inset-0 bg-gradient-to-b from-[#fff8f5] via-white to-[#fff5f7]" />
-      
- 
+
       <div
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{
@@ -117,25 +106,29 @@ const StatisticsSection = () => {
           </div>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h2 className="text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">DOOH Impact Statistics</h2>
+              <h2 className="text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">
+                DOOH Impact Statistics
+              </h2>
               <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">
-                Real-time attention data from our premium Bangladeshi screens shows that more than half of the audience takes
-                the next step—whether that&apos;s a QR scan, a site visit, or a direct purchase.
+                Real-time attention data from our premium Bangladeshi screens
+                shows that more than half of the audience takes the next
+                step—whether that&apos;s a QR scan, a site visit, or a direct
+                purchase.
               </p>
             </div>
             <div className="rounded-2xl bg-gradient-to-br from-orange-50 to-rose-50 p-6 text-sm text-slate-600 shadow-inner">
               <p className="font-semibold text-slate-900">What&apos;s new</p>
               <p className="mt-2">
-                Creative is now adaptive per district feed, letting us react to weather, promos, and events in less than 15 minutes.
+                Creative is now adaptive per district feed, letting us react to
+                weather, promos, and events in less than 15 minutes.
               </p>
               <p className="mt-2">
-                Media and mobile paths are stitched through a single reporting dashboard, so the metrics below reflect your living funnel.
+                Media and mobile paths are stitched through a single reporting
+                dashboard, so the metrics below reflect your living funnel.
               </p>
             </div>
           </div>
         </motion.div>
-
-
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {stats.map((stat, index) => {
@@ -150,12 +143,18 @@ const StatisticsSection = () => {
                 initial={{ opacity: 0, y: 24 }}
                 animate={
                   isInView
-                    ? { opacity: 1, y: 0, transition: { delay: 0.15 * index } }
+                    ? {
+                        opacity: 1,
+                        y: 0,
+                        transition: { delay: 0.15 * index },
+                      }
                     : { opacity: 0, y: 24 }
                 }
               >
                 <div className="flex items-center justify-between gap-4">
-                  <div className={`rounded-2xl bg-gradient-to-br ${stat.color} p-3 text-white shadow-lg`}>
+                  <div
+                    className={`rounded-2xl bg-gradient-to-br ${stat.color} p-3 text-white shadow-lg`}
+                  >
                     <Icon className="h-6 w-6" strokeWidth={2} />
                   </div>
                   <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -163,20 +162,35 @@ const StatisticsSection = () => {
                   </span>
                 </div>
 
-                <h3 className="mt-4 text-xl font-semibold text-slate-900">{stat.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{stat.description}</p>
+                <h3 className="mt-4 text-xl font-semibold text-slate-900">
+                  {stat.title}
+                </h3>
+                <p className="mt-1 text-sm text-slate-600">
+                  {stat.description}
+                </p>
 
                 <div className="mt-6 flex items-end justify-between gap-6">
                   <div>
                     <p className="text-5xl font-bold text-slate-900">
                       {animatedValue}
-                      <span className="ml-1 text-2xl font-semibold text-slate-500">%</span>
+                      <span className="ml-1 text-2xl font-semibold text-slate-500">
+                        %
+                      </span>
                     </p>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Current reading</p>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Current reading
+                    </p>
                   </div>
                   <div className="relative h-20 w-20">
                     <svg className="h-full w-full -rotate-90 transform">
-                      <circle cx="40" cy="40" r="34" fill="none" stroke="#e2e8f0" strokeWidth="5" />
+                      <circle
+                        cx="40"
+                        cy="40"
+                        r="34"
+                        fill="none"
+                        stroke="#e2e8f0"
+                        strokeWidth="5"
+                      />
                       <circle
                         cx="40"
                         cy="40"
@@ -185,18 +199,34 @@ const StatisticsSection = () => {
                         stroke={`url(#${gradientId})`}
                         strokeWidth="5"
                         strokeLinecap="round"
-                        strokeDasharray={`${(animatedValue / 100) * 213.6} 213.6`}
+                        strokeDasharray={`${
+                          (animatedValue / 100) * 213.6
+                        } 213.6`}
                         className="transition-all duration-150"
                       />
                       <defs>
-                        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor={stat.gradientStops[0]} />
-                          <stop offset="100%" stopColor={stat.gradientStops[1]} />
+                        <linearGradient
+                          id={gradientId}
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop
+                            offset="0%"
+                            stopColor={stat.gradientStops[0]}
+                          />
+                          <stop
+                            offset="100%"
+                            stopColor={stat.gradientStops[1]}
+                          />
                         </linearGradient>
                       </defs>
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-900">
-                      <span className="text-lg font-semibold">{animatedValue}%</span>
+                      <span className="text-lg font-semibold">
+                        {animatedValue}%
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -205,9 +235,14 @@ const StatisticsSection = () => {
                   <div className="relative h-2 overflow-hidden rounded-full bg-slate-100">
                     <div
                       className={`h-full rounded-full bg-gradient-to-r ${stat.color} transition-all duration-150 ease-out`}
-                      style={{ width: isInView ? `${animatedValue}%` : '0%' }}
+                      style={{
+                        width: isInView ? `${animatedValue}%` : '0%',
+                      }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent" style={{ animation: 'shimmer 2s infinite' }} />
+                    <div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                      style={{ animation: 'shimmer 2s infinite' }}
+                    />
                   </div>
                 </div>
 
@@ -217,6 +252,7 @@ const StatisticsSection = () => {
               </motion.article>
             );
           })}
+
           <motion.div
             className="relative overflow-hidden rounded-[32px] border border-white/40 bg-gradient-to-br from-[#ff784a] via-[#f43f5e] to-[#be123c] p-8 text-white shadow-2xl"
             initial={{ opacity: 0, y: 32 }}
@@ -224,22 +260,27 @@ const StatisticsSection = () => {
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
           >
             <div className="flex items-center justify-between gap-4">
-              <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">Conversion Pulse</span>
-              <span className="text-sm text-white/80">Every 15 min refresh</span>
+              <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
+                Conversion Pulse
+              </span>
+              <span className="text-sm text-white/80">
+                Every 15 min refresh
+              </span>
             </div>
             <div className="mt-8 text-[68px] font-black leading-none">
               {actionValue}
               <span className="text-3xl font-semibold">%</span>
             </div>
-            <p className="mt-3 max-w-sm text-lg text-white/90">{highlightStat.description}</p>
-
-        
+            <p className="mt-3 max-w-sm text-lg text-white/90">
+              {highlightStat?.description}
+            </p>
 
             <div className="mt-8 flex items-center gap-4 text-sm text-white/85">
               <span className="flex h-3 w-3 items-center justify-center rounded-full bg-white/50">
                 <span className="h-1.5 w-1.5 rounded-full bg-white" />
               </span>
-              Always-on monitoring fused with POS + GA4 to validate downstream lift.
+              Always-on monitoring fused with POS + GA4 to validate downstream
+              lift.
             </div>
 
             <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-white/20 blur-3xl" />
@@ -250,11 +291,11 @@ const StatisticsSection = () => {
 
       <style>
         {`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}
+          @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+        `}
       </style>
     </section>
   );
