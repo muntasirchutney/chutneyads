@@ -33,13 +33,13 @@ export function Contact() {
       <PixelGrid mounted={mounted} />
       {/* <div className="absolute inset-y-0 left-0 hidden w-1/3 bg-gradient-to-b from-[#ff7a45]/30 to-transparent lg:block" /> */}
       {/* <div className="absolute inset-y-0 right-0 hidden w-1/4 bg-gradient-to-t from-[#ffd89c]/30 to-transparent lg:block" /> */}
-      <div className="absolute top-0 left-0 hidden lg:block">
+      {/* <div className="absolute top-0 left-0 hidden lg:block">
         <img src="/shape-1.svg" alt="" />
-      </div>
+      </div> */}
 
       <div className="absolute -left-9 bottom-0 hidden  lg:block">
         {/* <CornerDecoration /> */}
-        <img src="/b-s-2.svg" className='h-full' alt="" />
+        <img src="/b-s-2.svg" className='h-screen opacity-10' alt="" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6">
