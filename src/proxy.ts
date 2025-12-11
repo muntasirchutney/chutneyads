@@ -6,6 +6,8 @@ import { NextResponse } from 'next/server';
 import arcjet from '@/libs/Arcjet';
 import { routing } from './libs/I18nRouting';
 
+export const runtime = 'edge';
+
 const handleI18nRouting = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([

@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/libs/I18nRouting';
 import '@/styles/global.css';
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   icons: [
     {
