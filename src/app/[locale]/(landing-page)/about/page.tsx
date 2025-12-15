@@ -1,8 +1,6 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
-
-export const runtime = 'edge';
 
 type IAboutProps = {
   params: Promise<{ locale: string }>;
@@ -55,3 +53,4 @@ export default async function About(props: IAboutProps) {
     </>
   );
 };
+

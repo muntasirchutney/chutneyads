@@ -1,7 +1,5 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-
-export const runtime = 'edge';
 
 
 export async function generateMetadata(props: {
@@ -28,3 +26,4 @@ export default function Counter() {
     </>
   );
 };
+

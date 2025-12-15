@@ -1,4 +1,4 @@
-import Hero from '@/components/Hero';
+﻿import Hero from '@/components/Hero';
 import { WhyChoose } from '@/components/WhyChoose';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -10,7 +10,6 @@ import ImpactCoverage from '@/components/Coverage';
 import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
 
-export const runtime = 'edge';
 type IIndexProps = {
   params: Promise<{ locale: string }>;
 };
@@ -53,3 +52,4 @@ export default async function Index(props: IIndexProps) {
     </>
   );
 };
+
