@@ -1,9 +1,4 @@
 import type { Metadata } from 'next';
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-
-import { routing } from '@/libs/I18nRouting';
 import '@/styles/global.css';
 
 export const runtime = 'edge';
@@ -33,24 +28,13 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function RootLayout(props: {
+export default function RootLayout(props: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await props.params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
-  setRequestLocale(locale);
-
   return (
-    <html lang={locale}>
+    <html lang="en">
       <body>
-        <NextIntlClientProvider>
-            {props.children}
-        </NextIntlClientProvider>
+        {props.children}
       </body>
     </html>
   );

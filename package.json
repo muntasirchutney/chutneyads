@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check:types": "tsc --noEmit --pretty",
-    "check:i18n": "i18n-check -l src/locales -s en -u src -f next-intl",
+
     "commit": "commit",
     "test": "vitest run",
     "test:e2e": "playwright test",
@@ -33,7 +33,7 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
-    "@sentry/nextjs": "^10.27.0",
+
     "@t3-oss/env-nextjs": "^0.13.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -42,7 +42,7 @@
     "lucide-react": "^0.555.0",
     "motion": "^12.23.25",
     "next": "^16.0.7",
-    "next-intl": "^4.4.0",
+
     "pg": "^8.16.3",
     "posthog-js": "^1.298.0",
     "react": "^19.2.0",
@@ -60,7 +60,7 @@
     "@electric-sql/pglite-socket": "^0.0.19",
     "@eslint-react/eslint-plugin": "^2.3.7",
     "@faker-js/faker": "^10.1.0",
-    "@lingual/i18n-check": "^0.8.14",
+
     "@next/bundle-analyzer": "^16.0.7",
     "@next/eslint-plugin-next": "^16.0.7",
     "@opennextjs/cloudflare": "^1.14.6",
