@@ -10,8 +10,8 @@ import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
 
 export const metadata: Metadata = {
-  title: "Next.js Boilerplate Presentation",
-  description: "Next js Boilerplate is the perfect starter code for your project. Build your React application with the Next.js framework.",
+  title: "Chutney Ads",
+  description: "Chutney Ads is a leading digital marketing agency in Bangladesh. We provide a range of services to help businesses grow and succeed online.",
 };
 
 export default function Index() {
