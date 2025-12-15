@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-export const runtime = 'edge';
+
 
 const AVAILABLE_SLUGS = new Set(Array.from({ length: 6 }, (_, index) => `${index}`));
 
