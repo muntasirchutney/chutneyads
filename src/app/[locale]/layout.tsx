@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/libs/I18nRouting';
 import '@/styles/global.css';
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   icons: [
     {
@@ -30,10 +32,6 @@ export const metadata: Metadata = {
     },
   ],
 };
-
-export function generateStaticParams() {
-  return routing.locales.map(locale => ({ locale }));
-}
 
 export default async function RootLayout(props: {
   children: React.ReactNode;

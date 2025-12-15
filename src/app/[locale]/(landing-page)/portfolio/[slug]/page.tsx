@@ -1,25 +1,25 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
-import { routing } from '@/libs/I18nRouting';
+import { notFound } from 'next/navigation';
+
+export const runtime = 'edge';
+
+const AVAILABLE_SLUGS = new Set(Array.from({ length: 6 }, (_, index) => `${index}`));
 
 type IPortfolioDetailProps = {
   params: Promise<{ slug: string; locale: string }>;
 };
 
-export function generateStaticParams() {
-  return routing.locales
-    .map(locale =>
-      Array.from(Array.from({ length: 6 }).keys()).map(elt => ({
-        slug: `${elt}`,
-        locale,
-      })),
-    )
-    .flat(1);
+function validateSlug(slug: string) {
+  if (!AVAILABLE_SLUGS.has(slug)) {
+    notFound();
+  }
 }
 
 export async function generateMetadata(props: IPortfolioDetailProps): Promise<Metadata> {
   const { locale, slug } = await props.params;
+  validateSlug(slug);
   const t = await getTranslations({
     locale,
     namespace: 'PortfolioSlug',
@@ -33,6 +33,7 @@ export async function generateMetadata(props: IPortfolioDetailProps): Promise<Me
 
 export default async function PortfolioDetail(props: IPortfolioDetailProps) {
   const { locale, slug } = await props.params;
+  validateSlug(slug);
   setRequestLocale(locale);
   const t = await getTranslations({
     locale,
@@ -69,4 +70,3 @@ export default async function PortfolioDetail(props: IPortfolioDetailProps) {
   );
 };
 
-export const dynamicParams = false;

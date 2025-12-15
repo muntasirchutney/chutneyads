@@ -1,6 +1,8 @@
-﻿import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 
 import { BaseTemplate } from '@/templates/BaseTemplate';
+
+export const runtime = 'edge';
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -8,15 +10,10 @@ export default async function Layout(props: {
 }) {
   const { locale } = await props.params;
   setRequestLocale(locale);
- 
 
   return (
     <>
-
-      <BaseTemplate
-
-
-      >
+      <BaseTemplate>
         {props.children}
       </BaseTemplate>
     </>

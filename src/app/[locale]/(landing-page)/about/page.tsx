@@ -2,6 +2,8 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
 
+export const runtime = 'edge';
+
 type IAboutProps = {
   params: Promise<{ locale: string }>;
 };

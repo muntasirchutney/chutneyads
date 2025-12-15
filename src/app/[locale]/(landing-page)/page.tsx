@@ -10,6 +10,8 @@ import ImpactCoverage from '@/components/Coverage';
 import { Footer } from '@/components/Footer';
 import { Contact } from '@/components/Contact';
 
+export const runtime = 'edge';
+
 type IIndexProps = {
   params: Promise<{ locale: string }>;
 };
