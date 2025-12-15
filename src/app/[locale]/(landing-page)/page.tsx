@@ -31,7 +31,7 @@ export async function generateMetadata(props: IIndexProps): Promise<Metadata> {
 export default async function Index(props: IIndexProps) {
   const { locale } = await props.params;
   setRequestLocale(locale);
-
+// comment
 
   return (
     <>
