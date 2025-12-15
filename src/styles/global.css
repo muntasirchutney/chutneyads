@@ -7,7 +7,7 @@
   Any --color-* token becomes usable via:
   bg-*, text-*, border-*, ring-*, fill-*, stroke-* utilities.
 */
-/* stylelint-dis */
+
 @theme {
   /* Surfaces */
   --color-background: oklch(1 0 0);          /* white */
