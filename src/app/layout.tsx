@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Preloader } from '@/components/Preloader';
 import '@/styles/global.css';
 
 export const runtime = 'edge';
@@ -34,6 +35,7 @@ export default function RootLayout(props: {
   return (
     <html lang="en">
       <body>
+        <Preloader />
         {props.children}
       </body>
     </html>
