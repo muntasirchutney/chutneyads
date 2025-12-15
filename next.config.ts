@@ -1,67 +1,54 @@
-import withBundleAnalyzer from '@next/bundle-analyzer';
-import type { NextConfig } from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
-import './src/libs/Env';
+import type { NextConfig } from "next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
+import { withSentryConfig } from "@sentry/nextjs";
+import createNextIntlPlugin from "next-intl/plugin";
+import "./src/libs/Env";
 
-// Define the base Next.js configuration
 const baseConfig: NextConfig = {
-  devIndicators: {
-    position: 'bottom-right',
-  },
+  devIndicators: { position: "bottom-right" },
   poweredByHeader: false,
   reactStrictMode: true,
   reactCompiler: true,
   outputFileTracingIncludes: {
-    '/': ['./migrations/**/*'],
+    "/": ["./migrations/**/*"],
   },
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
 };
 
-// Initialize the Next-Intl plugin
-let configWithPlugins = createNextIntlPlugin('./src/libs/I18n.ts')(baseConfig);
+let config: NextConfig = createNextIntlPlugin("./src/libs/I18n.ts")(baseConfig);
 
-// Conditionally enable bundle analysis
-if (process.env.ANALYZE === 'true') {
-  configWithPlugins = withBundleAnalyzer()(configWithPlugins);
+if (process.env.ANALYZE === "true") {
+  config = withBundleAnalyzer()(config);
 }
 
-// Conditionally enable Sentry configuration
-// if (!process.env.NEXT_PUBLIC_SENTRY_DISABLED) {
-//   configWithPlugins = withSentryConfig(configWithPlugins, {
-//     // For all available options, see:
-//     // https://www.npmjs.com/package/@sentry/webpack-plugin#options
-//     org: process.env.SENTRY_ORGANIZATION,
-//     project: process.env.SENTRY_PROJECT,
+// ✅ Cloudflare Pages: treat CF_PAGES as a boolean flag (exists = true)
+const isCloudflarePages = !!process.env.CF_PAGES;
 
-//     // Only print logs for uploading source maps in CI
-//     silent: !process.env.CI,
+// accept "1"/"true"/"TRUE"
+const envTrue = (v?: string) => v === "1" || v === "true" || v === "TRUE";
 
-//     // For all available options, see:
-//     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+// ✅ Allow manual override via env var too
+const sentryDisabled = isCloudflarePages || envTrue(process.env.NEXT_PUBLIC_SENTRY_DISABLED);
 
-//     // Upload a larger set of source maps for prettier stack traces (increases build time)
-//     widenClientFileUpload: true,
+if (!sentryDisabled) {
+  config = withSentryConfig(
+    config,
+    {
+      org: process.env.SENTRY_ORGANIZATION,
+      project: process.env.SENTRY_PROJECT,
+      silent: !envTrue(process.env.CI),
+      // authToken: process.env.SENTRY_AUTH_TOKEN, // optional
+    },
+    {
+      widenClientFileUpload: true,
+      reactComponentAnnotation: { enabled: true },
+      tunnelRoute: "/monitoring",
+      disableLogger: true,
+      telemetry: false,
+    }
+  );
+}
 
-//     // Upload a larger set of source maps for prettier stack traces (increases build time)
-//     reactComponentAnnotation: {
-//       enabled: true,
-//     },
-
-//     // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-//     // This can increase your server load as well as your hosting bill.
-//     // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-//     // side errors will fail.
-//     tunnelRoute: '/monitoring',
-
-//     // Automatically tree-shake Sentry logger statements to reduce bundle size
-//     disableLogger: true,
-
-//     // Disable Sentry telemetry
-//     telemetry: false,
-//   },);
-// }
-
-const nextConfig = configWithPlugins;
-export default nextConfig;
+export default config;
