@@ -49,7 +49,7 @@ export default function Hero() {
             },
           }}
         >
-          <motion.img src="/logo.svg" alt="logo" className="mb-10 h-[70px]" variants={heroVariants} />
+          <motion.img src="/Logo.svg" alt="logo" className="mb-10 h-[70px]" variants={heroVariants} />
           <motion.div className="text-[48px] leading-[1.3]" variants={heroVariants}>
             Amplify Your Brand&apos;s Voice in the Heart of
             {' '}
